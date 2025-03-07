@@ -115,3 +115,7 @@ export function convertFileToBase64 = (file: File) => {
     reader.readAsDataURL(file);
   });
 };
+
+export function camelCaseToPascalCase(str) {
+  return str.replace(/^./, (char) => char.toUpperCase());
+}
