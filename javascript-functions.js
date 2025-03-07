@@ -95,3 +95,11 @@ export const objectHasAny = (obj: any, predicate: (obj: any) => any): boolean =>
   }
   return false;
 };
+
+// converts firstName to First Name, rxBIN to Rx BIN.
+export function camelCaseToTitleCase(str) {
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    .replace(/\b[a-z]/g, (char) => char.toUpperCase());
+}
