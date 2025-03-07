@@ -103,3 +103,15 @@ export function camelCaseToTitleCase(str) {
     .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
     .replace(/\b[a-z]/g, (char) => char.toUpperCase());
 }
+
+// converts file selected in browser for upload to base64 string
+export function convertFileToBase64 = (file: File) => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
