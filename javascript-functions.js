@@ -119,3 +119,25 @@ export function convertFileToBase64 = (file: File) => {
 export function camelCaseToPascalCase(str) {
   return str.replace(/^./, (char) => char.toUpperCase());
 }
+
+export function setValue(object: any, path: string | Array<string>, value: any) {
+  if (!object) return object;
+
+  const keys = Array.isArray(path) ? path : path.split(".");
+  let current = object;
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+
+    if (i === keys.length - 1) {
+      current[key] = value;
+    } else {
+      if (!current[key] || typeof current[key] !== "object") {
+        current[key] = {};
+      }
+      current = current[key];
+    }
+  }
+
+  return object;
+}
