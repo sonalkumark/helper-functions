@@ -184,7 +184,22 @@ BEGIN
             ELSE
             BEGIN
                 -- scalars: overwrite
-                SET @Result = JSON_MODIFY(@Result, '$.' + QUOTENAME(@kName,'"'), @kVal);
+				IF LOWER(@kVal) IN ('true', 'false') 
+				BEGIN 
+					SET @Result = JSON_MODIFY(@Result, '$.' + QUOTENAME(@kName,'"'), CASE WHEN LOWER(@kVal) = 'true' THEN CAST(1 AS BIT) WHEN LOWER(@kVal) = 'false' THEN CAST(0 AS BIT) ELSE NULL END);
+				END
+				ELSE IF TRY_CAST(@kVal AS BIGINT) IS NOT NULL
+				BEGIN
+					SET @Result = JSON_MODIFY(@Result, '$.' + QUOTENAME(@kName,'"'), TRY_CAST(@kVal AS BIGINT));
+				END
+				ELSE IF TRY_CAST(@kVal AS DECIMAL(25, 5)) IS NOT NULL
+				BEGIN
+					SET @Result = JSON_MODIFY(@Result, '$.' + QUOTENAME(@kName,'"'), TRY_CAST(@kVal AS DECIMAL(25, 5)));
+				END
+				ELSE
+				BEGIN
+					SET @Result = JSON_MODIFY(@Result, '$.' + QUOTENAME(@kName,'"'), @kVal);
+				END
             END
 
             SET @r += 1;
